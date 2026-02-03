@@ -1,0 +1,13 @@
+name: AI_Agent_Promoter
+on:
+  schedule:
+    - cron: '0 * * * *' # AI tự động đi rải link mỗi 1 tiếng
+  workflow_dispatch:
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto_Ping
+        run: |
+          curl "http://www.google.com/ping?sitemap=https://github.com/npcanhthanh/USDT-Flash-TRC20-Tool-2026"
+          curl "https://www.bing.com/ping?sitemap=https://github.com/npcanhthanh/USDT-Flash-TRC20-Tool-2026"
